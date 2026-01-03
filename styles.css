@@ -444,6 +444,12 @@ button.ghost {
   filter: brightness(1.05);
 }
 
+.emoji {
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+  font-size: 1rem;
+  line-height: 1;
+}
+
 @media (max-width: 900px) {
   .hero {
     grid-template-columns: 1fr;
