@@ -1,6 +1,16 @@
 const BASE_CLAIM_AGE = 62;
 const MAX_CLAIM_AGE = 70;
-const BENEFIT_GROWTH_RATE = 0.0824;
+const CLAIM_MULTIPLIERS = [
+  { age: 62, factor: 0.7 },
+  { age: 63, factor: 0.75 },
+  { age: 64, factor: 0.8 },
+  { age: 65, factor: 0.8667 },
+  { age: 66, factor: 0.9333 },
+  { age: 67, factor: 1.0 },
+  { age: 68, factor: 1.08 },
+  { age: 69, factor: 1.16 },
+  { age: 70, factor: 1.24 },
+];
 const DEFAULT_BASE_BENEFIT = 1200;
 
 const tableRoot = document.getElementById("benefit-table");
@@ -52,14 +62,15 @@ const parseCurrency = (value) => {
   return Number.isFinite(parsed) ? parsed : null;
 };
 
-const buildBenefitRowsFromBase = (baseMonthly) => {
-  const rows = [];
-  for (let age = BASE_CLAIM_AGE; age <= MAX_CLAIM_AGE; age += 1) {
+const buildBenefitRowsFromBase = (baseMonthly, colaAnnual) => {
+  const baseClaim = CLAIM_MULTIPLIERS.find((row) => row.age === BASE_CLAIM_AGE);
+  const piaAt62 = baseMonthly / (baseClaim?.factor ?? 1);
+
+  return CLAIM_MULTIPLIERS.map(({ age, factor }) => {
     const years = age - BASE_CLAIM_AGE;
-    const monthly = baseMonthly * Math.pow(1 + BENEFIT_GROWTH_RATE, years);
-    rows.push({ age, monthly });
-  }
-  return rows;
+    const colaMultiplier = Math.pow(1 + colaAnnual, years);
+    return { age, monthly: piaAt62 * factor * colaMultiplier };
+  });
 };
 
 const monthlyPaymentAtTime = (baseMonthly, monthsSinceClaim, colaAnnual) => {
@@ -165,14 +176,14 @@ const renderTable = (rows) => {
   });
 };
 
-const buildOptions = (baseMonthly) => {
+const buildOptions = (baseMonthly, colaAnnual) => {
   if (baseMonthly === null || baseMonthly <= 0) {
     tableError.textContent = "Enter a valid monthly benefit at age 62.";
     return null;
   }
 
   tableError.textContent = "";
-  return buildBenefitRowsFromBase(baseMonthly).map((row) => ({
+  return buildBenefitRowsFromBase(baseMonthly, colaAnnual).map((row) => ({
     claimAge: row.age,
     monthly: row.monthly,
   }));
@@ -388,10 +399,11 @@ chartSvg.addEventListener("mouseleave", () => {
 
 const update = () => {
   const baseMonthly = parseCurrency(inputs.baseBenefit.value);
-  const rows = baseMonthly && baseMonthly > 0 ? buildBenefitRowsFromBase(baseMonthly) : [];
+  const colaAnnual = (parseNumber(inputs.cola.value) ?? 0) / 100;
+  const rows = baseMonthly && baseMonthly > 0 ? buildBenefitRowsFromBase(baseMonthly, colaAnnual) : [];
   renderTable(rows);
 
-  const options = buildOptions(baseMonthly);
+  const options = buildOptions(baseMonthly, colaAnnual);
   if (!options) {
     totalsTable.innerHTML = "";
     breakEvenResult.querySelector(".result-value").textContent = "--";
@@ -406,7 +418,7 @@ const update = () => {
   const startAge = BASE_CLAIM_AGE;
   const throughAge = parseNumber(inputs.throughAge.value) ?? 85;
   const maxAge = 100;
-  const cola = (parseNumber(inputs.cola.value) ?? 0) / 100;
+  const cola = colaAnnual;
   const interest = (parseNumber(inputs.interest.value) ?? 0) / 100;
   const tax = 0;
 
