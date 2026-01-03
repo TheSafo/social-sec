@@ -38,9 +38,19 @@ let chartState = null;
 const formatMoney = (value) =>
   value.toLocaleString(undefined, { maximumFractionDigits: 0, minimumFractionDigits: 0 });
 
+const formatCurrency = (value) => `$${formatMoney(value)}`;
+
 const parseNumber = (value) => {
   if (value === "" || value === null || value === undefined) return null;
   const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : null;
+};
+
+const parseCurrency = (value) => {
+  if (value === "" || value === null || value === undefined) return null;
+  const normalized = String(value).replace(/[^0-9.]/g, "");
+  if (!normalized) return null;
+  const parsed = Number(normalized);
   return Number.isFinite(parsed) ? parsed : null;
 };
 
@@ -376,7 +386,7 @@ chartSvg.addEventListener("mouseleave", () => {
 });
 
 const update = () => {
-  const baseMonthly = parseNumber(inputs.baseBenefit.value);
+  const baseMonthly = parseCurrency(inputs.baseBenefit.value);
   const rows = baseMonthly && baseMonthly > 0 ? buildBenefitRowsFromBase(baseMonthly) : [];
   renderTable(rows);
 
@@ -426,13 +436,19 @@ const update = () => {
   }
 };
 
+const formatBaseBenefitInput = () => {
+  const parsed = parseCurrency(inputs.baseBenefit.value);
+  if (parsed === null) return;
+  inputs.baseBenefit.value = formatCurrency(parsed);
+};
+
 resetTableButton.addEventListener("click", () => {
-  inputs.baseBenefit.value = String(DEFAULT_BASE_BENEFIT);
+  inputs.baseBenefit.value = formatCurrency(DEFAULT_BASE_BENEFIT);
   inputs.startAge.value = "62";
   inputs.throughAge.value = "85";
   inputs.maxAge.value = "100";
   inputs.cola.value = "2";
-  inputs.interest.value = "0";
+  inputs.interest.value = "4";
   update();
 });
 
@@ -440,7 +456,10 @@ Object.values(inputs).forEach((input) => {
   input.addEventListener("input", () => update());
 });
 
+inputs.baseBenefit.addEventListener("blur", formatBaseBenefitInput);
+
 claimSelectA.addEventListener("change", () => update());
 claimSelectB.addEventListener("change", () => update());
 
+formatBaseBenefitInput();
 update();

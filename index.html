@@ -15,7 +15,7 @@
           <h1>Find the age your claim choice pays off.</h1>
           <p class="lede">
             Enter your age 62 benefit, set assumptions, and compare two strategies to see when one
-            overtakes the other -- with COLA, taxes, and optional interest compounding.
+            overtakes the other -- with COLA and interest compounding.
           </p>
         </div>
       </header>
@@ -27,19 +27,19 @@
           <form class="form" id="assumptions-form">
             <label>
               Start age
-              <input type="number" step="0.1" min="0" id="start-age" value="62" />
+              <input type="number" step="1" min="62" id="start-age" value="62" />
             </label>
             <label>
-              Max age (break-even search)
-              <input type="number" step="0.1" min="0" id="max-age" value="100" />
+              Max age
+              <input type="number" step="1" min="0" id="max-age" value="100" />
             </label>
             <label>
               Annual COLA (%)
-              <input type="number" step="0.01" min="0" id="cola" value="2" />
+              <input type="number" step="0.1" min="0" id="cola" value="2" />
             </label>
             <label>
-              Interest on invested benefits (%)
-              <input type="number" step="0.01" min="0" id="interest" value="0" />
+              Interest on benefits (%)
+              <input type="number" step="0.5" min="0" id="interest" value="4" />
             </label>
           </form>
           <div class="note">All calculations are monthly and deterministic.</div>
@@ -58,7 +58,13 @@
           <form class="form">
             <label>
               Social security benefit at age 62
-              <input type="number" step="1" min="0" id="base-benefit" value="2632" />
+              <input
+                type="text"
+                inputmode="decimal"
+                id="base-benefit"
+                value="$2,632"
+                autocomplete="off"
+              />
             </label>
           </form>
           <div class="table" id="benefit-table"></div>
@@ -103,12 +109,11 @@
         </section>
 
         <section class="panel">
-          <h2>Totals through target age</h2>
-          <p class="panel-sub">Sorted by highest total value at your target age.</p>
+          <h2>Totals through age N</h2>
+          <p class="panel-sub">Enter the age you (or your spouse) expect to claim social seucirty benefits through. This card will sort claim ages and find the highest social security earnings through that age.</p>
           <div class="form inline">
             <label>
-              Earnings at age
-              <input type="number" step="0.1" min="0" id="through-age" value="85" />
+              <input type="number" step="1" min="70" id="through-age" value="85" />
             </label>
           </div>
           <div class="result-table" id="totals-table"></div>
