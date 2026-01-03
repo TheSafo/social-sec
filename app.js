@@ -11,7 +11,12 @@ const CLAIM_MULTIPLIERS = [
   { age: 69, factor: 1.16 },
   { age: 70, factor: 1.24 },
 ];
-const DEFAULT_BASE_BENEFIT = 1200;
+const DEFAULTS = {
+  baseBenefit: 1200,
+  throughAge: 85,
+  cola: 1,
+  interest: 4,
+};
 
 const tableRoot = document.getElementById("benefit-table");
 const tableError = document.getElementById("table-error");
@@ -455,11 +460,15 @@ const formatBaseBenefitInput = () => {
   inputs.baseBenefit.value = formatCurrency(parsed);
 };
 
+const applyDefaults = () => {
+  inputs.baseBenefit.value = formatCurrency(DEFAULTS.baseBenefit);
+  inputs.throughAge.value = String(DEFAULTS.throughAge);
+  inputs.cola.value = String(DEFAULTS.cola);
+  inputs.interest.value = String(DEFAULTS.interest);
+};
+
 resetTableButton.addEventListener("click", () => {
-  inputs.baseBenefit.value = formatCurrency(DEFAULT_BASE_BENEFIT);
-  inputs.throughAge.value = "85";
-  inputs.cola.value = "2";
-  inputs.interest.value = "4";
+  applyDefaults();
   update();
 });
 
@@ -474,5 +483,5 @@ inputs.baseBenefit.addEventListener("blur", formatBaseBenefitInput);
 claimSelectA.addEventListener("change", () => update());
 claimSelectB.addEventListener("change", () => update());
 
-formatBaseBenefitInput();
+applyDefaults();
 update();
