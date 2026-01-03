@@ -1,7 +1,7 @@
 const BASE_CLAIM_AGE = 62;
 const MAX_CLAIM_AGE = 70;
 const BENEFIT_GROWTH_RATE = 0.0824;
-const DEFAULT_BASE_BENEFIT = 2632;
+const DEFAULT_BASE_BENEFIT = 1200;
 
 const tableRoot = document.getElementById("benefit-table");
 const tableError = document.getElementById("table-error");
