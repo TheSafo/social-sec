@@ -14,7 +14,7 @@
           <p class="eyebrow">Benefit Strategy Tool</p>
           <h1>Find the age your claim choice pays off.</h1>
           <p class="lede">
-            Edit your benefit table, set assumptions, and compare two strategies to see when one
+            Enter your age 62 benefit, set assumptions, and compare two strategies to see when one
             overtakes the other -- with COLA, taxes, and optional interest compounding.
           </p>
         </div>
@@ -63,13 +63,18 @@
           <div class="panel-header">
             <div>
               <h2>Benefit table</h2>
-              <p class="panel-sub">Adjust any monthly benefit. Add or remove ages.</p>
+              <p class="panel-sub">Set your monthly benefit at age 62. We assume +8% each year.</p>
             </div>
             <div class="panel-actions">
-              <button type="button" class="ghost" id="add-row">Add age</button>
               <button type="button" class="ghost" id="reset-table">Reset defaults</button>
             </div>
           </div>
+          <form class="form">
+            <label>
+              Social security benefit at age 62
+              <input type="number" step="1" min="0" id="base-benefit" value="2632" />
+            </label>
+          </form>
           <div class="table" id="benefit-table"></div>
           <div class="error" id="table-error" role="alert"></div>
         </section>
@@ -116,7 +121,7 @@
           <p class="panel-sub">Sorted by highest total value at your target age.</p>
           <div class="form inline">
             <label>
-              Evaluate through age
+              Earnings at age
               <input type="number" step="0.1" min="0" id="through-age" value="85" />
             </label>
           </div>

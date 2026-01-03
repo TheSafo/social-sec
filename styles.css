@@ -194,7 +194,7 @@ button.ghost {
 
 .table-row {
   display: grid;
-  grid-template-columns: 1fr 1.2fr auto;
+  grid-template-columns: 1fr 1.2fr;
   gap: 12px;
   align-items: center;
 }
@@ -202,6 +202,11 @@ button.ghost {
 .table-row span {
   font-size: 0.8rem;
   color: var(--muted);
+}
+
+.table-row .table-value {
+  font-size: 0.95rem;
+  color: var(--ink);
 }
 
 .table-header span {

@@ -1,21 +1,14 @@
-const DEFAULT_BENEFITS = [
-  { age: 62, monthly: 2632 },
-  { age: 63, monthly: 2846 },
-  { age: 64, monthly: 3080 },
-  { age: 65, monthly: 3378 },
-  { age: 66, monthly: 3677 },
-  { age: 67, monthly: 3966 },
-  { age: 68, monthly: 4093 },
-  { age: 69, monthly: 4433 },
-  { age: 70, monthly: 4988 },
-];
+const BASE_CLAIM_AGE = 62;
+const MAX_CLAIM_AGE = 70;
+const BENEFIT_GROWTH_RATE = 0.08;
+const DEFAULT_BASE_BENEFIT = 2632;
 
 const tableRoot = document.getElementById("benefit-table");
 const tableError = document.getElementById("table-error");
-const addRowButton = document.getElementById("add-row");
 const resetTableButton = document.getElementById("reset-table");
 
 const inputs = {
+  baseBenefit: document.getElementById("base-benefit"),
   startAge: document.getElementById("start-age"),
   throughAge: document.getElementById("through-age"),
   maxAge: document.getElementById("max-age"),
@@ -40,7 +33,6 @@ const chartSvg = document.getElementById("break-even-chart");
 const legendA = document.getElementById("legend-a");
 const legendB = document.getElementById("legend-b");
 
-let benefitRows = structuredClone(DEFAULT_BENEFITS);
 let chartState = null;
 
 const formatMoney = (value) =>
@@ -50,6 +42,16 @@ const parseNumber = (value) => {
   if (value === "" || value === null || value === undefined) return null;
   const parsed = Number(value);
   return Number.isFinite(parsed) ? parsed : null;
+};
+
+const buildBenefitRowsFromBase = (baseMonthly) => {
+  const rows = [];
+  for (let age = BASE_CLAIM_AGE; age <= MAX_CLAIM_AGE; age += 1) {
+    const years = age - BASE_CLAIM_AGE;
+    const monthly = baseMonthly * Math.pow(1 + BENEFIT_GROWTH_RATE, years);
+    rows.push({ age, monthly });
+  }
+  return rows;
 };
 
 const monthlyPaymentAtTime = (baseMonthly, monthsSinceClaim, colaAnnual) => {
@@ -124,7 +126,7 @@ const breakEvenAge = (optionA, optionB, startAge, maxAge, colaAnnual, interestAn
   return null;
 };
 
-const renderTable = () => {
+const renderTable = (rows) => {
   tableRoot.innerHTML = "";
   const header = document.createElement("div");
   header.className = "table-row table-header";
@@ -135,80 +137,34 @@ const renderTable = () => {
   const headerMonthly = document.createElement("span");
   headerMonthly.textContent = "Monthly benefit";
 
-  header.append(headerAge, headerMonthly, document.createElement("span"));
+  header.append(headerAge, headerMonthly);
   tableRoot.appendChild(header);
 
-  benefitRows.forEach((row, index) => {
+  rows.forEach((row) => {
     const wrapper = document.createElement("div");
     wrapper.className = "table-row";
 
-    const ageInput = document.createElement("input");
-    ageInput.type = "number";
-    ageInput.step = "1";
-    ageInput.min = "0";
-    ageInput.value = row.age;
-    ageInput.placeholder = "Age";
-    ageInput.addEventListener("input", (event) => {
-      benefitRows[index].age = parseNumber(event.target.value);
-      update();
-    });
+    const ageValue = document.createElement("span");
+    ageValue.className = "table-value";
+    ageValue.textContent = row.age;
 
-    const monthlyInput = document.createElement("input");
-    monthlyInput.type = "number";
-    monthlyInput.step = "1";
-    monthlyInput.min = "0";
-    monthlyInput.value = row.monthly;
-    monthlyInput.placeholder = "Monthly";
-    monthlyInput.addEventListener("input", (event) => {
-      benefitRows[index].monthly = parseNumber(event.target.value);
-      update();
-    });
+    const monthlyValue = document.createElement("span");
+    monthlyValue.className = "table-value";
+    monthlyValue.textContent = `$${formatMoney(row.monthly)}/mo`;
 
-    const removeButton = document.createElement("button");
-    removeButton.type = "button";
-    removeButton.className = "remove-row";
-    removeButton.textContent = "Remove";
-    removeButton.addEventListener("click", () => {
-      benefitRows.splice(index, 1);
-      renderTable();
-      update();
-    });
-
-    wrapper.append(ageInput, monthlyInput, removeButton);
+    wrapper.append(ageValue, monthlyValue);
     tableRoot.appendChild(wrapper);
   });
 };
 
-const buildOptions = () => {
-  const rows = benefitRows
-    .map((row) => ({
-      age: parseNumber(row.age),
-      monthly: parseNumber(row.monthly),
-    }))
-    .filter((row) => row.age !== null && row.monthly !== null);
-
-  const invalid = rows.some((row) => row.age <= 0 || row.monthly <= 0);
-  if (!rows.length || invalid) {
-    tableError.textContent = "Enter valid ages and monthly benefits above 0.";
-    return null;
-  }
-
-  const ages = rows.map((row) => row.age);
-  const duplicates = new Set();
-  ages.forEach((age) => {
-    if (duplicates.has(age)) return;
-    if (ages.filter((item) => item === age).length > 1) duplicates.add(age);
-  });
-
-  if (duplicates.size > 0) {
-    tableError.textContent = "Claim ages must be unique.";
+const buildOptions = (baseMonthly) => {
+  if (baseMonthly === null || baseMonthly <= 0) {
+    tableError.textContent = "Enter a valid monthly benefit at age 62.";
     return null;
   }
 
   tableError.textContent = "";
-  return rows
-    .sort((a, b) => a.age - b.age)
-    .map((row) => ({ claimAge: row.age, monthly: row.monthly }));
+  return buildBenefitRowsFromBase(baseMonthly).map((row) => ({ claimAge: row.age, monthly: row.monthly }));
 };
 
 const updateSelects = (options) => {
@@ -221,6 +177,8 @@ const updateSelects = (options) => {
 
   const selectedA = claimSelectA.value;
   const selectedB = claimSelectB.value;
+  const hadSelectedA = Boolean(selectedA);
+  const hadSelectedB = Boolean(selectedB);
 
   claimSelectA.innerHTML = "";
   claimSelectB.innerHTML = "";
@@ -230,11 +188,20 @@ const updateSelects = (options) => {
     claimSelectB.appendChild(buildOption(option.claimAge));
   });
 
-  if (selectedA) claimSelectA.value = selectedA;
-  if (selectedB) claimSelectB.value = selectedB;
+  if (hadSelectedA) claimSelectA.value = selectedA;
+  if (hadSelectedB) claimSelectB.value = selectedB;
 
-  if (!claimSelectA.value && options[0]) claimSelectA.value = options[0].claimAge;
-  if (!claimSelectB.value && options[1]) claimSelectB.value = options[1].claimAge;
+  if (!hadSelectedA && options[0]) claimSelectA.value = options[0].claimAge;
+  if (!hadSelectedB) {
+    const defaultB = options.find((option) => option.claimAge === MAX_CLAIM_AGE);
+    if (defaultB) {
+      claimSelectB.value = defaultB.claimAge;
+    } else if (options[1]) {
+      claimSelectB.value = options[1].claimAge;
+    } else if (options[0]) {
+      claimSelectB.value = options[0].claimAge;
+    }
+  }
 };
 
 const updateTotalsTable = (rows, throughAge) => {
@@ -408,7 +375,11 @@ chartSvg.addEventListener("mouseleave", () => {
 });
 
 const update = () => {
-  const options = buildOptions();
+  const baseMonthly = parseNumber(inputs.baseBenefit.value);
+  const rows = baseMonthly && baseMonthly > 0 ? buildBenefitRowsFromBase(baseMonthly) : [];
+  renderTable(rows);
+
+  const options = buildOptions(baseMonthly);
   if (!options) {
     totalsTable.innerHTML = "";
     breakEvenResult.querySelector(".result-value").textContent = "--";
@@ -420,7 +391,7 @@ const update = () => {
 
   updateSelects(options);
 
-  const startAge = parseNumber(inputs.startAge.value) ?? options[0].claimAge;
+  const startAge = parseNumber(inputs.startAge.value) ?? BASE_CLAIM_AGE;
   const throughAge = parseNumber(inputs.throughAge.value) ?? 85;
   const maxAge = parseNumber(inputs.maxAge.value) ?? 100;
   const cola = (parseNumber(inputs.cola.value) ?? 0) / 100;
@@ -454,20 +425,13 @@ const update = () => {
   }
 };
 
-addRowButton.addEventListener("click", () => {
-  benefitRows.push({ age: 71, monthly: 5200 });
-  renderTable();
-  update();
-});
-
 resetTableButton.addEventListener("click", () => {
-  benefitRows = structuredClone(DEFAULT_BENEFITS);
+  inputs.baseBenefit.value = String(DEFAULT_BASE_BENEFIT);
   inputs.startAge.value = "62";
   inputs.throughAge.value = "85";
   inputs.maxAge.value = "100";
   inputs.cola.value = "2";
   inputs.interest.value = "0";
-  renderTable();
   update();
 });
 
@@ -478,5 +442,4 @@ Object.values(inputs).forEach((input) => {
 claimSelectA.addEventListener("change", () => update());
 claimSelectB.addEventListener("change", () => update());
 
-renderTable();
 update();
