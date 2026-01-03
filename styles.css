@@ -131,6 +131,20 @@ body {
   gap: 16px;
 }
 
+.panel-subsection {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px dashed var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.panel-subsection h3 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
 .panel-sub {
   color: var(--muted);
   margin: 0;
@@ -244,8 +258,17 @@ button.ghost {
   background: rgba(255, 255, 255, 0.7);
   padding: 14px;
   display: grid;
-  gap: 10px;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+  grid-template-areas:
+    "y chart"
+    ". legend";
+  gap: 10px 14px;
+}
+
+.chart-area {
   position: relative;
+  grid-area: chart;
 }
 
 .mini-chart svg {
@@ -295,6 +318,7 @@ button.ghost {
 }
 
 .chart-legend {
+  grid-area: legend;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -316,6 +340,28 @@ button.ghost {
 
 .chart-legend .dot.b {
   background: var(--accent-2);
+}
+
+.axis-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--muted);
+  pointer-events: none;
+}
+
+.axis-label-x {
+  position: absolute;
+  right: 16px;
+  bottom: -6px;
+}
+
+.axis-label-y {
+  grid-area: y;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  align-self: center;
+  justify-self: center;
 }
 
 .result-title {
@@ -359,6 +405,43 @@ button.ghost {
 
 .result-row span {
   font-size: 0.85rem;
+}
+
+.donation-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 18px 20px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: var(--shadow);
+  font-size: 0.95rem;
+  color: var(--muted);
+  flex-wrap: wrap;
+}
+
+.donation-cta p {
+  margin: 0;
+}
+
+.donation-button {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: var(--accent-2);
+  color: #fefcf8;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.9rem;
+}
+
+.donation-button:hover {
+  filter: brightness(1.05);
 }
 
 @media (max-width: 900px) {

@@ -1,6 +1,6 @@
 const BASE_CLAIM_AGE = 62;
 const MAX_CLAIM_AGE = 70;
-const BENEFIT_GROWTH_RATE = 0.08;
+const BENEFIT_GROWTH_RATE = 0.0824;
 const DEFAULT_BASE_BENEFIT = 2632;
 
 const tableRoot = document.getElementById("benefit-table");
@@ -9,9 +9,7 @@ const resetTableButton = document.getElementById("reset-table");
 
 const inputs = {
   baseBenefit: document.getElementById("base-benefit"),
-  startAge: document.getElementById("start-age"),
   throughAge: document.getElementById("through-age"),
-  maxAge: document.getElementById("max-age"),
   cola: document.getElementById("cola"),
   interest: document.getElementById("interest"),
 };
@@ -174,7 +172,10 @@ const buildOptions = (baseMonthly) => {
   }
 
   tableError.textContent = "";
-  return buildBenefitRowsFromBase(baseMonthly).map((row) => ({ claimAge: row.age, monthly: row.monthly }));
+  return buildBenefitRowsFromBase(baseMonthly).map((row) => ({
+    claimAge: row.age,
+    monthly: row.monthly,
+  }));
 };
 
 const updateSelects = (options) => {
@@ -402,9 +403,9 @@ const update = () => {
 
   updateSelects(options);
 
-  const startAge = parseNumber(inputs.startAge.value) ?? BASE_CLAIM_AGE;
+  const startAge = BASE_CLAIM_AGE;
   const throughAge = parseNumber(inputs.throughAge.value) ?? 85;
-  const maxAge = parseNumber(inputs.maxAge.value) ?? 100;
+  const maxAge = 100;
   const cola = (parseNumber(inputs.cola.value) ?? 0) / 100;
   const interest = (parseNumber(inputs.interest.value) ?? 0) / 100;
   const tax = 0;
@@ -444,15 +445,15 @@ const formatBaseBenefitInput = () => {
 
 resetTableButton.addEventListener("click", () => {
   inputs.baseBenefit.value = formatCurrency(DEFAULT_BASE_BENEFIT);
-  inputs.startAge.value = "62";
   inputs.throughAge.value = "85";
-  inputs.maxAge.value = "100";
   inputs.cola.value = "2";
   inputs.interest.value = "4";
   update();
 });
 
-Object.values(inputs).forEach((input) => {
+Object.values(inputs)
+  .filter(Boolean)
+  .forEach((input) => {
   input.addEventListener("input", () => update());
 });
 
