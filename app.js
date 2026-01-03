@@ -229,6 +229,7 @@ const updateTotalsTable = (rows, throughAge) => {
 };
 
 const updateHeroStats = (breakEven, bestRow, maxGap) => {
+  if (!heroBreakEven || !heroBest || !heroGap) return;
   heroBreakEven.textContent = breakEven ? `~${breakEven.toFixed(1)} yrs` : "--";
   heroBest.textContent = bestRow ? `Claim ${bestRow.claimAge}` : "--";
   heroGap.textContent = maxGap ? `$${formatMoney(maxGap)}` : "--";
