@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Social Security Break-Even Studio</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="grain" aria-hidden="true"></div>
+    <main class="page">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Benefit Strategy Tool</p>
+          <h1>Find the age your claim choice pays off.</h1>
+          <p class="lede">
+            Edit your benefit table, set assumptions, and compare two strategies to see when one
+            overtakes the other -- with COLA, taxes, and optional interest compounding.
+          </p>
+        </div>
+        <div class="hero-card">
+          <div class="hero-stat">
+            <span class="label">Break-even</span>
+            <span class="value" id="hero-break-even">--</span>
+          </div>
+          <div class="hero-stat">
+            <span class="label">Best by age</span>
+            <span class="value" id="hero-best">--</span>
+          </div>
+          <div class="hero-stat">
+            <span class="label">Top gap</span>
+            <span class="value" id="hero-gap">--</span>
+          </div>
+        </div>
+      </header>
+
+      <section class="grid">
+        <section class="panel">
+          <h2>Assumptions</h2>
+          <p class="panel-sub">Defaults match the Python script; tune as needed.</p>
+          <form class="form" id="assumptions-form">
+            <label>
+              Start age
+              <input type="number" step="0.1" min="0" id="start-age" value="62" />
+            </label>
+            <label>
+              Max age (break-even search)
+              <input type="number" step="0.1" min="0" id="max-age" value="100" />
+            </label>
+            <label>
+              Annual COLA (%)
+              <input type="number" step="0.01" min="0" id="cola" value="2" />
+            </label>
+            <label>
+              Interest on invested benefits (%)
+              <input type="number" step="0.01" min="0" id="interest" value="0" />
+            </label>
+          </form>
+          <div class="note">All calculations are monthly and deterministic.</div>
+        </section>
+
+        <section class="panel wide">
+          <div class="panel-header">
+            <div>
+              <h2>Benefit table</h2>
+              <p class="panel-sub">Adjust any monthly benefit. Add or remove ages.</p>
+            </div>
+            <div class="panel-actions">
+              <button type="button" class="ghost" id="add-row">Add age</button>
+              <button type="button" class="ghost" id="reset-table">Reset defaults</button>
+            </div>
+          </div>
+          <div class="table" id="benefit-table"></div>
+          <div class="error" id="table-error" role="alert"></div>
+        </section>
+      </section>
+
+      <section class="grid">
+        <section class="panel">
+          <h2>Break-even comparison</h2>
+          <p class="panel-sub">Pick two claim ages to find the crossover point.</p>
+          <div class="form inline">
+            <label>
+              Claim A
+              <select id="claim-a"></select>
+            </label>
+            <label>
+              Claim B
+              <select id="claim-b"></select>
+            </label>
+          </div>
+          <div class="mini-chart" aria-hidden="true">
+            <svg id="break-even-chart" viewBox="0 0 360 160" preserveAspectRatio="none">
+              <path id="chart-a" d="" />
+              <path id="chart-b" d="" />
+              <line id="chart-cross" x1="0" y1="0" x2="0" y2="0" />
+              <line id="chart-hover" x1="0" y1="0" x2="0" y2="0" />
+            </svg>
+            <div class="chart-tooltip" id="chart-tooltip" role="status" aria-live="polite"></div>
+            <div class="chart-legend">
+              <span class="dot a"></span>
+              <span id="legend-a">Claim A</span>
+              <span class="dot b"></span>
+              <span id="legend-b">Claim B</span>
+            </div>
+          </div>
+          <div class="result" id="break-even-result">
+            <p class="result-title">Result</p>
+            <p class="result-value">--</p>
+            <p class="result-sub">Choose claim ages to compare.</p>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>Totals through target age</h2>
+          <p class="panel-sub">Sorted by highest total value at your target age.</p>
+          <div class="form inline">
+            <label>
+              Evaluate through age
+              <input type="number" step="0.1" min="0" id="through-age" value="85" />
+            </label>
+          </div>
+          <div class="result-table" id="totals-table"></div>
+        </section>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
