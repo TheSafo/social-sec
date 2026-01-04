@@ -13,22 +13,28 @@ import {
 } from './utils/calculations';
 
 function App() {
-  const [baseBenefit, setBaseBenefit] = useState(1200);
-  const [throughAge, setThroughAge] = useState(85);
-  const [cola, setCola] = useState(1.0);
-  const [interest, setInterest] = useState(4.0);
-  const [federalTaxRate, setFederalTaxRate] = useState(20.0);
+  const [baseBenefit, setBaseBenefit] = useState('1200');
+  const [throughAge, setThroughAge] = useState('85');
+  const [cola, setCola] = useState('1');
+  const [interest, setInterest] = useState('4');
+  const [federalTaxRate, setFederalTaxRate] = useState('20');
   const [claimAgeA, setClaimAgeA] = useState(62);
   const [claimAgeB, setClaimAgeB] = useState(70);
 
   // Derived state
-  const colaAnnual = cola / 100;
-  const interestAnnual = interest / 100;
-  const taxRate = federalTaxRate / 100;
+  const parseNumber = (value: string, fallback = 0) => {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : fallback;
+  };
+  const colaAnnual = parseNumber(cola) / 100;
+  const interestAnnual = parseNumber(interest) / 100;
+  const taxRate = parseNumber(federalTaxRate) / 100;
+  const throughAgeValue = parseNumber(throughAge);
 
+  const baseBenefitValue = parseNumber(baseBenefit);
   const benefitRows = useMemo(
-    () => buildBenefitRowsFromBase(baseBenefit, colaAnnual),
-    [baseBenefit, colaAnnual]
+    () => buildBenefitRowsFromBase(baseBenefitValue, colaAnnual),
+    [baseBenefitValue, colaAnnual]
   );
 
   const options = useMemo(
@@ -40,10 +46,10 @@ function App() {
     return options
       .map((opt) => ({
         ...opt,
-        total: totalAtThroughAge(opt, BASE_CLAIM_AGE, throughAge, colaAnnual, interestAnnual, taxRate),
+        total: totalAtThroughAge(opt, BASE_CLAIM_AGE, throughAgeValue, colaAnnual, interestAnnual, taxRate),
       }))
       .sort((a, b) => b.total - a.total);
-  }, [options, throughAge, colaAnnual, interestAnnual, taxRate]);
+  }, [options, throughAgeValue, colaAnnual, interestAnnual, taxRate]);
 
   const seriesA = useMemo(
     () =>
