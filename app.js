@@ -170,7 +170,8 @@ const renderTable = (rows) => {
 
     const ageValue = document.createElement("span");
     ageValue.className = "table-value";
-    ageValue.textContent = row.age;
+    const displayAge = Number(row.age) === 67 ? "67 (Full Retirement Age)" : row.age;
+    ageValue.textContent = displayAge;
 
     const monthlyValue = document.createElement("span");
     monthlyValue.className = "table-value";
