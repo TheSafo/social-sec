@@ -33,7 +33,7 @@ export const ComparisonPanel: React.FC<ComparisonPanelProps> = ({
 
       <div className="flex gap-4 mb-6">
         <label className="block w-full">
-          <span className="text-muted text-sm font-small mb-1 block"><b>Claim Age (Lower Option)</b></span>
+          <span className="text-muted text-sm font-medium mb-1 block"><b>Claim Age (Lower Option)</b></span>
           <select
             value={selectedAgeA}
             onChange={(e) => setSelectedAgeA(Number(e.target.value))}
