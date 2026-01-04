@@ -11,13 +11,16 @@ interface TotalsPanelProps {
 export const TotalsPanel: React.FC<TotalsPanelProps> = ({ throughAge, setThroughAge, totals }) => {
   return (
     <div className="mb-8 p-6 bg-panel backdrop-blur-sm rounded-[20px] shadow-[0_25px_50px_rgba(12,18,16,0.12)] border border-border">
-      <h2 className="text-xl font-serif font-bold mb-2 text-ink">Life Expectancy to Age ___</h2>
+      <h2 className="text-xl font-serif font-bold mb-2 text-ink">Life Expectancy</h2>
       <p className="text-sm text-muted mb-4">
         Enter the age you (or your spouse) expect to claim social security benefits through. This section will sort claim ages and find the highest social security earnings through that age.
       </p>
       <div className="text-sm text-ink bg-accent/10 p-4 rounded-xl border border-accent/20 mb-6 font-sans">
         <p className="font-medium mb-1 font-serif text-accent-2">Remember the Survivor Benefit</p>
         <p className="opacity-90">If one spouse passes away, the survivor can receive the higher of the two benefit amounts. However, if you claim survivor benefits before your FRA (Full Retirement Age) payment will be permanently reduced by up to 70%.</p>
+      <p className="text-sm text-muted mb-4">
+        <b>To Age:</b>
+      </p>
       </div>
 
       <div className="mb-6">
