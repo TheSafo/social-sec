@@ -266,7 +266,7 @@ const updateBreakEvenPanel = (breakEven, optionA, optionB) => {
   const value = breakEven ? `~${breakEven.toFixed(1)} years` : "No break-even found";
   const subtitle = breakEven
     ? `Claim ${optionB.claimAge} overtakes claim ${optionA.claimAge} at this age.`
-    : `No crossover before your max age.`;
+    : `No crossover before reaching age 100.`;
 
   breakEvenResult.querySelector(".result-value").textContent = value;
   breakEvenResult.querySelector(".result-sub").textContent = subtitle;
