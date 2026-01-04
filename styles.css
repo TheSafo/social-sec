@@ -210,7 +210,17 @@ button.ghost {
   display: grid;
   grid-template-columns: 1fr 1.2fr;
   gap: 12px;
-  align-items: center;
+  align-items: start;
+}
+
+.table-row > :first-child {
+  justify-self: start;
+  text-align: left;
+}
+
+.table-row .table-value {
+  justify-self: end;
+  text-align: right;
 }
 
 .table-row span {
@@ -484,5 +494,61 @@ button.ghost {
 
   .result-row {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  body {
+    min-height: 100dvh;
+  }
+
+  .page {
+    padding: 36px 16px 64px;
+    gap: 28px;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.1rem, 6vw, 2.6rem);
+  }
+
+  .lede {
+    font-size: 0.95rem;
+  }
+
+  .hero-card {
+    padding: 18px;
+  }
+
+  .mini-chart svg {
+    height: clamp(120px, 35vw, 160px);
+  }
+
+  .axis-label-y {
+    display: none;
+  }
+
+  button,
+  .donation-button {
+    min-height: 44px;
+  }
+
+  .table-row {
+    grid-template-columns: auto 1fr;
+    gap: 8px 12px;
+    padding: 12px 0;
+    border-bottom: 1px dashed var(--border);
+  }
+
+  .table-row span {
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .table-row .table-value {
+    font-size: 1rem;
+    font-weight: 500;
+    justify-self: end;
+    text-align: left;
   }
 }
