@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #0c1210;
+  --color-muted: #47514a;
+  --color-paper: #f5f1e8;
+  --color-accent: #f56f5f;
+  --color-accent-2: #315c48;
+  --color-panel: rgba(255, 255, 255, 0.78);
+  --color-border: rgba(12, 18, 16, 0.12);
+  
+  --font-serif: "Fraunces", serif;
+  --font-mono: "IBM Plex Mono", monospace;
+  --font-sans: "IBM Plex Mono", monospace; /* Defaulting sans to mono as per original body font */
+}
+
+:root {
+  --radius: 20px;
+  --shadow: 0 25px 50px rgba(12, 18, 16, 0.12);
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-mono);
+  background-color: var(--color-paper);
+  background-image: 
+    radial-gradient(circle at top left, #ffd4b6 0%, transparent 52%),
+    radial-gradient(circle at 90% 10%, #cde6d7 0%, transparent 48%);
+  background-attachment: fixed; /* fix gradient on scroll */
+  color: var(--color-ink);
+  min-height: 100vh;
+}
+
+.grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.12'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+  z-index: 50;
+}
+
+/* Custom scrollbar to match the vibe */
+::-webkit-scrollbar {
+  width: 12px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-paper);
+}
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-muted);
+  border-radius: 6px;
+  border: 3px solid var(--color-paper);
+}
