@@ -18,7 +18,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
           <div className="max-w-3xl space-y-4 text-lg text-muted leading-relaxed font-sans">
             <p className="font-medium text-ink">For those born in 1960 and later</p>
             <p>
-              Please consult with a Financial Advisor before taking any action. Calculations below are meant as a quick view tool to give an apples to apples comparison of investing all your benefits into a compounding investment vehicle.
+              Calculations below are meant as a quick view tool to give an apples to apples comparison of investing all your benefits into a compounding investment vehicle. Please consult with a Financial Advisor before taking any action.
             </p>
             <p>
               Enter your age 62 benefit, set assumptions, and compare two strategies to see when one overtakes the other — with COLA and interest compounding.
