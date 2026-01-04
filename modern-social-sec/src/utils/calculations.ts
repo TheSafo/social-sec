@@ -57,16 +57,19 @@ export const totalAtThroughAge = (
   const claimMonth = Math.round(option.claimAge * 12);
 
   const rMonthly = interestAnnual > 0 ? Math.pow(1 + interestAnnual, 1 / 12) - 1 : 0;
+  const taxableBenefitRate = 0.85;
 
   let balance = 0;
   for (let month = startMonth; month < endMonth; month += 1) {
     if (rMonthly > 0) {
-      balance *= 1 + rMonthly;
+      const interestEarned = balance * rMonthly;
+      const interestTax = interestEarned * taxRate;
+      balance += interestEarned - interestTax;
     }
     if (month >= claimMonth) {
       const monthsSinceClaim = month - claimMonth;
       const payment = monthlyPaymentAtTime(option.monthly, monthsSinceClaim, colaAnnual);
-      balance += payment * (1 - taxRate);
+      balance += payment * (1 - taxRate * taxableBenefitRate);
     }
   }
   return balance;
@@ -89,6 +92,7 @@ export const balanceSeries = (
   const endMonth = Math.round(maxAge * 12);
   const claimMonth = Math.round(option.claimAge * 12);
   const rMonthly = interestAnnual > 0 ? Math.pow(1 + interestAnnual, 1 / 12) - 1 : 0;
+  const taxableBenefitRate = 0.85;
 
   const ages: number[] = [];
   const balances: number[] = [];
@@ -98,13 +102,15 @@ export const balanceSeries = (
     if (t > startMonth) {
       const month = t - 1;
       if (rMonthly > 0) {
-        balance *= 1 + rMonthly;
+        const interestEarned = balance * rMonthly;
+        const interestTax = interestEarned * taxRate;
+        balance += interestEarned - interestTax;
       }
 
       if (month >= claimMonth) {
         const monthsSinceClaim = month - claimMonth;
         const payment = monthlyPaymentAtTime(option.monthly, monthsSinceClaim, colaAnnual);
-        balance += payment * (1 - taxRate);
+        balance += payment * (1 - taxRate * taxableBenefitRate);
       }
     }
 

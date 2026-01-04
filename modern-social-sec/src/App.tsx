@@ -17,13 +17,14 @@ function App() {
   const [throughAge, setThroughAge] = useState(85);
   const [cola, setCola] = useState(1.0);
   const [interest, setInterest] = useState(4.0);
+  const [federalTaxRate, setFederalTaxRate] = useState(20.0);
   const [claimAgeA, setClaimAgeA] = useState(62);
   const [claimAgeB, setClaimAgeB] = useState(70);
 
   // Derived state
   const colaAnnual = cola / 100;
   const interestAnnual = interest / 100;
-  const taxRate = 0; // Keeping as 0 for now as per original app
+  const taxRate = federalTaxRate / 100;
 
   const benefitRows = useMemo(
     () => buildBenefitRowsFromBase(baseBenefit, colaAnnual),
@@ -90,6 +91,8 @@ function App() {
             setCola={setCola}
             interest={interest}
             setInterest={setInterest}
+            federalTaxRate={federalTaxRate}
+            setFederalTaxRate={setFederalTaxRate}
           />
           <BenefitTable
             baseBenefit={baseBenefit}
