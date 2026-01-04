@@ -14,7 +14,7 @@ import {
 
 function App() {
   const [baseBenefit, setBaseBenefit] = useState(1200);
-  const [throughAge, setThroughAge] = useState(85);
+  const [throughAge, setThroughAge] = useState('85');
   const [cola, setCola] = useState('1');
   const [interest, setInterest] = useState('4');
   const [federalTaxRate, setFederalTaxRate] = useState('20');
@@ -22,13 +22,14 @@ function App() {
   const [claimAgeB, setClaimAgeB] = useState(70);
 
   // Derived state
-  const parsePercent = (value: string) => {
+  const parseNumber = (value: string, fallback = 0) => {
     const parsed = Number(value);
-    return Number.isFinite(parsed) ? parsed : 0;
+    return Number.isFinite(parsed) ? parsed : fallback;
   };
-  const colaAnnual = parsePercent(cola) / 100;
-  const interestAnnual = parsePercent(interest) / 100;
-  const taxRate = parsePercent(federalTaxRate) / 100;
+  const colaAnnual = parseNumber(cola) / 100;
+  const interestAnnual = parseNumber(interest) / 100;
+  const taxRate = parseNumber(federalTaxRate) / 100;
+  const throughAgeValue = parseNumber(throughAge);
 
   const benefitRows = useMemo(
     () => buildBenefitRowsFromBase(baseBenefit, colaAnnual),
@@ -44,10 +45,10 @@ function App() {
     return options
       .map((opt) => ({
         ...opt,
-        total: totalAtThroughAge(opt, BASE_CLAIM_AGE, throughAge, colaAnnual, interestAnnual, taxRate),
+        total: totalAtThroughAge(opt, BASE_CLAIM_AGE, throughAgeValue, colaAnnual, interestAnnual, taxRate),
       }))
       .sort((a, b) => b.total - a.total);
-  }, [options, throughAge, colaAnnual, interestAnnual, taxRate]);
+  }, [options, throughAgeValue, colaAnnual, interestAnnual, taxRate]);
 
   const seriesA = useMemo(
     () =>

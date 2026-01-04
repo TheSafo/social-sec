@@ -3,8 +3,8 @@ import type { TotalRow } from '../utils/calculations';
 import { formatMoney } from '../utils/formatters';
 
 interface TotalsPanelProps {
-  throughAge: number;
-  setThroughAge: (age: number) => void;
+  throughAge: string;
+  setThroughAge: (age: string) => void;
   totals: TotalRow[];
 }
 
@@ -29,7 +29,7 @@ export const TotalsPanel: React.FC<TotalsPanelProps> = ({ throughAge, setThrough
             min="70"
             max="110"
             value={throughAge}
-            onChange={(e) => setThroughAge(Number(e.target.value))}
+            onChange={(e) => setThroughAge(e.target.value)}
             className="block w-full max-w-xs rounded-xl border-border bg-white/85 text-ink shadow-sm focus:border-accent focus:ring-accent focus:outline-none focus:outline-2 focus:outline-accent/30 sm:text-sm p-3 border font-mono"
           />
         </label>
