@@ -51,7 +51,7 @@ export const BenefitTable: React.FC<BenefitTableProps> = ({ baseBenefit, setBase
           <span>Age</span>
           <span className="text-right">Monthly benefit</span>
         </div>
-        <div className="divide-y divide-border/50 max-h-96 overflow-y-auto custom-scrollbar">
+        <div className="divide-y divide-border/50 max-h-108">
           {rows.map((row) => (
             <div key={row.age} className="px-4 py-3 grid grid-cols-2 text-sm text-ink hover:bg-white/50 transition-colors">
               <span className="font-mono">{row.age === 67 ? '67 (Full Retirement Age)' : row.age}</span>
