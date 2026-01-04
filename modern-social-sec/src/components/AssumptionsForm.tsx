@@ -1,12 +1,12 @@
 import React from 'react';
 
 interface AssumptionsFormProps {
-  cola: number;
-  setCola: (val: number) => void;
-  interest: number;
-  setInterest: (val: number) => void;
-  federalTaxRate: number;
-  setFederalTaxRate: (val: number) => void;
+  cola: string;
+  setCola: (val: string) => void;
+  interest: string;
+  setInterest: (val: string) => void;
+  federalTaxRate: string;
+  setFederalTaxRate: (val: string) => void;
 }
 
 export const AssumptionsForm: React.FC<AssumptionsFormProps> = ({
@@ -28,7 +28,7 @@ export const AssumptionsForm: React.FC<AssumptionsFormProps> = ({
             step="0.1"
             min="0"
             value={cola}
-            onChange={(e) => setCola(Number(e.target.value))}
+            onChange={(e) => setCola(e.target.value)}
             className="block w-full rounded-xl border-border bg-white/85 text-ink shadow-sm focus:border-accent focus:ring-accent focus:ring-opacity-50 sm:text-sm p-3 border font-mono outline-none focus:outline-2 focus:outline-accent/30"
           />
         </label>
@@ -39,7 +39,7 @@ export const AssumptionsForm: React.FC<AssumptionsFormProps> = ({
             step="0.5"
             min="0"
             value={interest}
-            onChange={(e) => setInterest(Number(e.target.value))}
+            onChange={(e) => setInterest(e.target.value)}
             className="block w-full rounded-xl border-border bg-white/85 text-ink shadow-sm focus:border-accent focus:ring-accent focus:ring-opacity-50 sm:text-sm p-3 border font-mono outline-none focus:outline-2 focus:outline-accent/30"
           />
         </label>
@@ -50,7 +50,7 @@ export const AssumptionsForm: React.FC<AssumptionsFormProps> = ({
             step="0.5"
             min="0"
             value={federalTaxRate}
-            onChange={(e) => setFederalTaxRate(Number(e.target.value))}
+            onChange={(e) => setFederalTaxRate(e.target.value)}
             className="block w-full rounded-xl border-border bg-white/85 text-ink shadow-sm focus:border-accent focus:ring-accent focus:ring-opacity-50 sm:text-sm p-3 border font-mono outline-none focus:outline-2 focus:outline-accent/30"
           />
         </label>
