@@ -13,7 +13,7 @@ import {
 } from './utils/calculations';
 
 function App() {
-  const [baseBenefit, setBaseBenefit] = useState(1200);
+  const [baseBenefit, setBaseBenefit] = useState('1200');
   const [throughAge, setThroughAge] = useState('85');
   const [cola, setCola] = useState('1');
   const [interest, setInterest] = useState('4');
@@ -31,9 +31,10 @@ function App() {
   const taxRate = parseNumber(federalTaxRate) / 100;
   const throughAgeValue = parseNumber(throughAge);
 
+  const baseBenefitValue = parseNumber(baseBenefit);
   const benefitRows = useMemo(
-    () => buildBenefitRowsFromBase(baseBenefit, colaAnnual),
-    [baseBenefit, colaAnnual]
+    () => buildBenefitRowsFromBase(baseBenefitValue, colaAnnual),
+    [baseBenefitValue, colaAnnual]
   );
 
   const options = useMemo(

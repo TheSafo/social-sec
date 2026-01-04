@@ -3,8 +3,8 @@ import type { BenefitRow } from '../utils/calculations';
 import { formatMoney } from '../utils/formatters';
 
 interface BenefitTableProps {
-  baseBenefit: number;
-  setBaseBenefit: (val: number) => void;
+  baseBenefit: string;
+  setBaseBenefit: (val: string) => void;
   rows: BenefitRow[];
 }
 
@@ -18,7 +18,7 @@ export const BenefitTable: React.FC<BenefitTableProps> = ({ baseBenefit, setBase
           <p className="text-sm text-muted">We apply a claim multiplier plus COLA.</p>
         </div>
         <button
-          onClick={() => setBaseBenefit(1200)}
+          onClick={() => setBaseBenefit('1200')}
           className="text-sm text-accent-2 hover:text-accent font-medium whitespace-nowrap"
         >
           Reset defaults
@@ -35,7 +35,7 @@ export const BenefitTable: React.FC<BenefitTableProps> = ({ baseBenefit, setBase
             <input
               type="number"
               value={baseBenefit}
-              onChange={(e) => setBaseBenefit(Number(e.target.value))}
+              onChange={(e) => setBaseBenefit(e.target.value)}
               className="block w-full rounded-xl border-border bg-white/85 text-ink pl-7 pr-12 focus:border-accent focus:ring-accent focus:outline-none focus:outline-2 focus:outline-accent/30 sm:text-sm p-3 border font-mono"
               placeholder="0.00"
             />
