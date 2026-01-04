@@ -10,16 +10,16 @@ interface BenefitTableProps {
 
 export const BenefitTable: React.FC<BenefitTableProps> = ({ baseBenefit, setBaseBenefit, rows }) => {
   return (
-    <div className="mb-8 p-6 bg-white rounded-lg shadow-sm border border-gray-200">
+    <div className="mb-8 p-6 bg-panel backdrop-blur-sm rounded-[20px] shadow-[0_25px_50px_rgba(12,18,16,0.12)] border border-border">
       <div className="flex flex-col sm:flex-row justify-between items-start mb-4 gap-4">
         <div>
-          <h2 className="text-xl font-bold text-gray-900">Benefit Table</h2>
-          <p className="text-sm text-gray-500 mt-1">Set your monthly benefit at age 62.</p>
-          <p className="text-sm text-gray-500">We apply a claim multiplier plus COLA.</p>
+          <h2 className="text-xl font-serif font-bold text-ink">Benefit Table</h2>
+          <p className="text-sm text-muted mt-1">Set your monthly benefit at age 62.</p>
+          <p className="text-sm text-muted">We apply a claim multiplier plus COLA.</p>
         </div>
         <button
           onClick={() => setBaseBenefit(1200)}
-          className="text-sm text-indigo-600 hover:text-indigo-800 font-medium whitespace-nowrap"
+          className="text-sm text-accent-2 hover:text-accent font-medium whitespace-nowrap"
         >
           Reset defaults
         </button>
@@ -28,34 +28,34 @@ export const BenefitTable: React.FC<BenefitTableProps> = ({ baseBenefit, setBase
       <div className="mb-6">
         <label className="block">
           <span className="sr-only">Base Benefit</span>
-          <div className="relative rounded-md shadow-sm max-w-xs">
+          <div className="relative rounded-xl shadow-sm max-w-xs">
             <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-              <span className="text-gray-500 sm:text-sm">$</span>
+              <span className="text-muted sm:text-sm">$</span>
             </div>
             <input
               type="number"
               value={baseBenefit}
               onChange={(e) => setBaseBenefit(Number(e.target.value))}
-              className="block w-full rounded-md border-gray-300 pl-7 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border"
+              className="block w-full rounded-xl border-border bg-white/85 text-ink pl-7 pr-12 focus:border-accent focus:ring-accent focus:outline-none focus:outline-2 focus:outline-accent/30 sm:text-sm p-3 border font-mono"
               placeholder="0.00"
             />
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-              <span className="text-gray-500 sm:text-sm">/mo</span>
+              <span className="text-muted sm:text-sm">/mo</span>
             </div>
           </div>
         </label>
       </div>
 
-      <div className="overflow-hidden rounded-md border border-gray-200">
-        <div className="bg-gray-50 px-4 py-2 grid grid-cols-2 text-sm font-medium text-gray-700 border-b border-gray-200">
+      <div className="overflow-hidden rounded-xl border border-border">
+        <div className="bg-white/50 px-4 py-2 grid grid-cols-2 text-xs uppercase tracking-wider font-medium text-muted border-b border-border">
           <span>Age</span>
           <span className="text-right">Monthly benefit</span>
         </div>
-        <div className="divide-y divide-gray-200 max-h-96 overflow-y-auto">
+        <div className="divide-y divide-border/50 max-h-96 overflow-y-auto custom-scrollbar">
           {rows.map((row) => (
-            <div key={row.age} className="px-4 py-2 grid grid-cols-2 text-sm text-gray-900 hover:bg-gray-50">
-              <span>{row.age === 67 ? '67 (Full Retirement Age)' : row.age}</span>
-              <span className="text-right">${formatMoney(row.monthly)}/mo</span>
+            <div key={row.age} className="px-4 py-3 grid grid-cols-2 text-sm text-ink hover:bg-white/50 transition-colors">
+              <span className="font-mono">{row.age === 67 ? '67 (Full Retirement Age)' : row.age}</span>
+              <span className="text-right font-mono">${formatMoney(row.monthly)}/mo</span>
             </div>
           ))}
         </div>

@@ -103,13 +103,13 @@ export const BreakEvenChart: React.FC<BreakEvenChartProps> = ({
       <svg
         ref={svgRef}
         viewBox={`0 0 ${width} ${height}`}
-        className="w-full h-auto bg-slate-50 rounded border border-slate-100 cursor-crosshair touch-none"
+        className="w-full h-auto bg-white/70 rounded-[16px] border border-border cursor-crosshair touch-none"
         preserveAspectRatio="none"
         onMouseMove={handleMouseMove}
         onMouseLeave={() => setHover(null)}
       >
-        <path d={pathA} fill="none" stroke="#6366f1" strokeWidth="2" />
-        <path d={pathB} fill="none" stroke="#10b981" strokeWidth="2" />
+        <path d={pathA} fill="none" stroke="var(--color-accent)" strokeWidth="2.5" />
+        <path d={pathB} fill="none" stroke="var(--color-accent-2)" strokeWidth="2.5" />
         
         {crossX !== null && (
           <line
@@ -117,9 +117,10 @@ export const BreakEvenChart: React.FC<BreakEvenChartProps> = ({
             y1={padding}
             x2={crossX}
             y2={height - padding}
-            stroke="#94a3b8"
+            stroke="var(--color-ink)"
+            strokeOpacity="0.4"
             strokeWidth="1"
-            strokeDasharray="4 2"
+            strokeDasharray="4 6"
           />
         )}
 
@@ -129,39 +130,41 @@ export const BreakEvenChart: React.FC<BreakEvenChartProps> = ({
             y1={padding}
             x2={hover.x}
             y2={height - padding}
-            stroke="#64748b"
+            stroke="var(--color-ink)"
+            strokeOpacity="0.65"
             strokeWidth="1"
+            strokeDasharray="2 4"
           />
         )}
       </svg>
 
-      <div className="flex justify-between text-xs text-gray-500 mt-1 px-2">
+      <div className="flex justify-between text-xs text-muted mt-1 px-2 font-mono uppercase tracking-wider">
         <span>Age {startAge}</span>
         <span>Age {maxAge}</span>
       </div>
 
       {hover && (
         <div 
-          className="absolute z-10 bg-white/95 backdrop-blur shadow-lg rounded p-2 text-xs border border-gray-200 pointer-events-none"
+          className="absolute z-10 bg-ink/90 backdrop-blur shadow-lg rounded-xl p-3 text-xs text-paper pointer-events-none"
           style={{ 
             top: 10, 
             left: Math.min(Math.max(hover.x - 70, 0), width - 140) // simplistic clamping for demo
           }}
         >
-          <div className="font-bold mb-1">Age {hover.age}</div>
-          <div className="text-indigo-600">Claim {optionA.claimAge}: ${formatMoney(hover.valA)}</div>
-          <div className="text-emerald-600">Claim {optionB.claimAge}: ${formatMoney(hover.valB)}</div>
-          <div className="text-gray-500 mt-1 pt-1 border-t border-gray-100">Diff: ${formatMoney(Math.abs(hover.valA - hover.valB))}</div>
+          <div className="font-bold mb-1 font-serif text-sm">Age {hover.age}</div>
+          <div className="text-accent">Claim {optionA.claimAge}: ${formatMoney(hover.valA)}</div>
+          <div className="text-accent-2-light">Claim {optionB.claimAge}: ${formatMoney(hover.valB)}</div>
+          <div className="text-gray-400 mt-1 pt-1 border-t border-white/20">Diff: ${formatMoney(Math.abs(hover.valA - hover.valB))}</div>
         </div>
       )}
 
-      <div className="flex justify-center gap-4 mt-2 text-xs font-medium">
-        <div className="flex items-center gap-1">
-          <div className="w-2 h-2 rounded-full bg-indigo-500"></div>
+      <div className="flex justify-center gap-4 mt-2 text-xs font-medium text-muted font-mono">
+        <div className="flex items-center gap-2">
+          <div className="w-2.5 h-2.5 rounded-full bg-accent"></div>
           <span>Claim {optionA.claimAge}</span>
         </div>
-        <div className="flex items-center gap-1">
-          <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
+        <div className="flex items-center gap-2">
+          <div className="w-2.5 h-2.5 rounded-full bg-accent-2"></div>
           <span>Claim {optionB.claimAge}</span>
         </div>
       </div>
