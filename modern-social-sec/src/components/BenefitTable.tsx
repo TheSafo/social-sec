@@ -18,7 +18,7 @@ export const BenefitTable: React.FC<BenefitTableProps> = ({ baseBenefit, setBase
           <p className="text-sm text-muted">We apply a claim multiplier plus COLA.</p>
         </div>
         <button
-          onclick="window.location.reload();"
+          onClick={window.location.reload();}
           className="text-sm text-accent-2 hover:text-accent font-medium whitespace-nowrap"
         >
           Reset defaults
