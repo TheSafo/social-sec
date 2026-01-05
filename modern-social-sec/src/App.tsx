@@ -15,7 +15,7 @@ import {
 function App() {
   const [baseBenefit, setBaseBenefit] = useState('1200');
   const [throughAge, setThroughAge] = useState('85');
-  const [cola, setCola] = useState('1');
+  const [cola, setCola] = useState('2.5');
   const [interest, setInterest] = useState('4');
   const [federalTaxRate, setFederalTaxRate] = useState('20');
   const [claimAgeA, setClaimAgeA] = useState(62);
