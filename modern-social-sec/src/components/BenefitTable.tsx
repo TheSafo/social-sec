@@ -15,7 +15,7 @@ export const BenefitTable: React.FC<BenefitTableProps> = ({ baseBenefit, setBase
         <div>
           <h2 className="text-xl font-serif font-bold text-ink">Benefit Table</h2>
           <p className="text-sm text-muted mt-1">Set your monthly benefit at age 62.</p>
-          <p className="text-sm text-muted">We apply a claim multiplier plus COLA.</p>
+          <p className="text-sm text-muted">We apply a claim multiplier (8% a year) plus COLA.</p>
         </div>
         <button
           onClick={() => location.reload()}
